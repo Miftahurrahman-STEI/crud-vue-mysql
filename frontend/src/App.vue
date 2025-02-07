@@ -26,12 +26,14 @@
         <tr v-for="mahasiswa in mahasiswaList" :key="mahasiswa.nim">
           <!-- Tampilkan NIM asli -->
           <td>{{ mahasiswa.nim }}</td>
+
           <!-- Tampilkan nama atau input untuk edit -->
           <td>
             <span v-if="editId !== mahasiswa.nim">{{ mahasiswa.nama }}</span>
             <input v-else type="text" v-model="editName" class="input-field" />
           </td>
           <td>
+
             <!-- Tombol Edit/Save -->
             <button
               v-if="editId !== mahasiswa.nim"
@@ -43,13 +45,16 @@
             <button v-else @click="confirmEdit(mahasiswa)" class="btn btn-save">
               Save
             </button>
+
             <!-- Tombol Hapus -->
             <button
               @click="deleteMahasiswa(mahasiswa.nim)"
               class="btn btn-delete"
+              id="btn-delete"
             >
               Delete
             </button>
+
           </td>
         </tr>
       </tbody>
@@ -83,6 +88,10 @@ export default {
     },
     // Tambah mahasiswa baru
     addMahasiswa() {
+      if (!this.newMahasiswa.nama) {
+        return alert("Nama mahasiswa tidak boleh kosong!");
+      }
+      
       axios
         .post("http://localhost:8000/api/mahasiswa", this.newMahasiswa)
         .then(() => {
@@ -112,6 +121,11 @@ export default {
         .catch((error) => {
           console.error("Error editing mahasiswa:", error);
         });
+    },
+    confirmDelete(mahasiswa) {
+      if (alert(`Apakah Anda yakin ingin menghapus ${mahasiswa.nama}?`)) {
+        confirm(this.deleteMahasiswa(mahasiswa.nim));
+      }
     },
     // Hapus mahasiswa berdasarkan NIM
     deleteMahasiswa(nim) {
