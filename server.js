@@ -22,7 +22,6 @@ db.connect((err) => {
 // Get all mahasiswa
 app.get("/api/mahasiswa", (req, res) => {
     const sql = "SELECT * FROM mahasiswa";
-    console.log("Executing query:", sql); // Tambahkan ini
     
     db.query(sql, (err, result) => {
         if (err) throw err;
